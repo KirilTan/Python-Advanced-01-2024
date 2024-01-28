@@ -1,9 +1,7 @@
-# Python Advanced 01.2024
+# Python Advanced 2024
 
-Welcome to my repository! This repository holds all of my work and assignments completed throughout the Python Advanced course.
-
-Course start date: 
-
+Welcome to my repository! This repository holds all of my work and assignments completed throughout the Python Advanced course.\
+**It will be updated regularly untill completion of the course**
 
 ## Course Information
 
