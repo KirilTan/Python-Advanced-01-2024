@@ -1,15 +1,15 @@
 import core
 
-# Playing board dimensions
-ROWS = 6
-COLS = 7
+# Import the needed constants
+ROWS = core.ROWS
+COLS = core.COLS
 
 # Make the playing board
 board = core.make_board(rows=ROWS, cols=COLS)
 
 # Playing the game
 turns = 1
-while '0' in board:
+while True:
     player_to_move = 2 if turns % 2 == 0 else 1
 
     # User input
@@ -36,6 +36,17 @@ while '0' in board:
     core.display_board(board=board)
 
     # Check for a winner
-    core.check_for_winner(board=board)
+    if core.is_winner(current_row_index=r, current_col_index=c, board=board):
+        print()
+        core.display_board(board=board)
+        print(f'Player {player_to_move} wins!')
+        exit()
+
+    # Check if the board is full
+    if core.is_board_full(turns=turns):
+        core.display_board(board=board)
+        print(f'The board is full!')
+        exit()
 
     turns += 1
+

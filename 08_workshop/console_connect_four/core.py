@@ -1,5 +1,18 @@
 from typing import List
 
+# Constants
+ROWS = 6
+COLS = 7
+MAXIMUM_CONNECTIONS = 4
+
+DIRECTION_MAPPER = {
+    "left": (0, -1),
+    "up": (-1, 0),
+    "main_diagonal": (-1, -1),
+    "other_diagonal": (-1, 1),
+}
+
+
 class OutOfBoundsException(Exception):
     pass
 
@@ -73,5 +86,77 @@ def display_board(board: List[list[int]]) -> None:
         print(*board[row], sep=' ')
 
 
-def check_for_winner(board: List[list[int]]) -> bool:
-    pass
+def travel_direction(coordinates: tuple, current_row: int, current_col: int, element: int, sign: str, board: List[List[int]]) -> int:
+    """
+    This function counts the number of elements in a given direction from a given position on the board.
+
+    Parameters:
+        coordinates (tuple): a tuple containing the row and column directions
+        current_row (int): the row index of the current position
+        current_col (int): the column index of the current position
+        element (int): the element to be counted
+        sign (str): the sign to be used in the arithmetic expressions
+        board (List[List[int]]): the tic-tac-toe board
+
+    Returns:
+        int: the number of elements in the given direction from the given position
+
+    Raises:
+        IndexError: if the row or column index is out of bounds
+    """
+    row_direction, col_direction = coordinates
+
+    count = 0
+    for i in range(1, MAXIMUM_CONNECTIONS):
+        next_element_row_index = eval(f"{current_row} {sign} {row_direction} * {i}")
+        next_element_col_index = eval(f"{current_col} {sign} {col_direction} * {i}")
+
+        try:
+            if board[next_element_row_index][next_element_col_index] == element:
+                count += 1
+            else:
+                return count
+        except IndexError:
+            return count
+    return count
+
+
+def is_winner(current_row_index: int, current_col_index: int, board: List[List[int]]) -> bool:
+    """
+    This function checks if the player with the given sign has won the game.
+
+    Parameters:
+        current_row_index (int): the row index of the current position
+        current_col_index (int): the column index of the current position
+        board (List[List[int]]): the tic-tac-toe board
+
+    Returns:
+        bool: True if the player with the given sign has won, False otherwise
+
+    """
+    for direction, coordinates in DIRECTION_MAPPER.items():
+        searched_element = board[current_row_index][current_col_index]
+        travel_direction_count = travel_direction(
+            coordinates, current_row_index, current_col_index, searched_element, "+", board
+        )
+        travel_opposite_direction_count = travel_direction(
+            coordinates, current_row_index, current_col_index, searched_element, "-", board
+        )
+
+        if travel_direction_count + travel_opposite_direction_count + 1 >= MAXIMUM_CONNECTIONS:
+            return True
+    else:
+        return False
+
+
+def is_board_full(turns: int) -> bool:
+    """
+    This function checks if the board is full.
+
+    Parameters:
+        turns (int): the number of turns played so far
+
+    Returns:
+        bool: True if the board is full, False otherwise
+    """
+    return ROWS * COLS <= turns
