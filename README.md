@@ -25,7 +25,7 @@ Throughout this course, the following topics were covered:
 11. **Algorithms introduction**
 12. **Exam**
 
-## Scores - TBD
+## Score - 100%
 
 ---
 
