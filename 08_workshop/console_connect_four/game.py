@@ -9,7 +9,7 @@ board = core.make_board(rows=ROWS, cols=COLS)
 
 # Playing the game
 turns = 1
-while True:
+while '0' in board:
     player_to_move = 2 if turns % 2 == 0 else 1
 
     # User input
@@ -19,6 +19,7 @@ while True:
         print(f'Please enter a number between 1 and {COLS}')
         continue
 
+    # Get placed piece's coordinates
     try:
         r, c = core.move_player(board=board, player=player_to_move, col_to_move=column)
     except core.OutOfBoundsException:  # Check if the user entered a number that is out of bounds
@@ -33,5 +34,8 @@ while True:
 
     # Display the board
     core.display_board(board=board)
+
+    # Check for a winner
+    core.check_for_winner(board=board)
 
     turns += 1
